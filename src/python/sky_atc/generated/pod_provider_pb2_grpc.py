@@ -19,10 +19,10 @@ class PodProviderStub(object):
                 request_serializer=pod__provider__pb2.ConfigureNodeRequest.SerializeToString,
                 response_deserializer=pod__provider__pb2.ConfigureNodeReply.FromString,
                 )
-        self.CreateNode = channel.unary_unary(
-                '/PodProvider/CreateNode',
-                request_serializer=pod__provider__pb2.CreateNodeRequest.SerializeToString,
-                response_deserializer=pod__provider__pb2.CreateNodeReply.FromString,
+        self.CreatePod = channel.unary_unary(
+                '/PodProvider/CreatePod',
+                request_serializer=pod__provider__pb2.CreatePodRequest.SerializeToString,
+                response_deserializer=pod__provider__pb2.CreatePodReply.FromString,
                 )
 
 
@@ -35,7 +35,7 @@ class PodProviderServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def CreateNode(self, request, context):
+    def CreatePod(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -49,10 +49,10 @@ def add_PodProviderServicer_to_server(servicer, server):
                     request_deserializer=pod__provider__pb2.ConfigureNodeRequest.FromString,
                     response_serializer=pod__provider__pb2.ConfigureNodeReply.SerializeToString,
             ),
-            'CreateNode': grpc.unary_unary_rpc_method_handler(
-                    servicer.CreateNode,
-                    request_deserializer=pod__provider__pb2.CreateNodeRequest.FromString,
-                    response_serializer=pod__provider__pb2.CreateNodeReply.SerializeToString,
+            'CreatePod': grpc.unary_unary_rpc_method_handler(
+                    servicer.CreatePod,
+                    request_deserializer=pod__provider__pb2.CreatePodRequest.FromString,
+                    response_serializer=pod__provider__pb2.CreatePodReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -82,7 +82,7 @@ class PodProvider(object):
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
 
     @staticmethod
-    def CreateNode(request,
+    def CreatePod(request,
             target,
             options=(),
             channel_credentials=None,
@@ -92,8 +92,8 @@ class PodProvider(object):
             wait_for_ready=None,
             timeout=None,
             metadata=None):
-        return grpc.experimental.unary_unary(request, target, '/PodProvider/CreateNode',
-            pod__provider__pb2.CreateNodeRequest.SerializeToString,
-            pod__provider__pb2.CreateNodeReply.FromString,
+        return grpc.experimental.unary_unary(request, target, '/PodProvider/CreatePod',
+            pod__provider__pb2.CreatePodRequest.SerializeToString,
+            pod__provider__pb2.CreatePodReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -1,6 +1,6 @@
 import sky_atc.generated.pod_provider_pb2 as pod_provider_pb2
 import sky_atc.generated.pod_provider_pb2_grpc as pod_provider_pb2_grpc
-from sky_atc.k8s_util import json_string_to_node
+from sky_atc.k8s_util import json_string_to_node, json_string_to_pod
 
 import logging
 import json
@@ -32,3 +32,13 @@ class PodProviderServicer(pod_provider_pb2_grpc.PodProviderServicer):
             core_v1_node_json = json.dumps(node.to_dict())
         )
 
+
+    def CreatePod(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        logger.info(f"Got CreateNode request. {request}")
+
+        pod = json_string_to_pod(request.core_v1_pod_json)
+
+        # TODO
+
+        return pod_provider_pb2.CreatePodReply()

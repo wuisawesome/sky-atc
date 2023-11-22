@@ -26,10 +26,11 @@ dynamic = ["version"]
 
 [project.optional-dependencies]
 aws = ["awscli"]
+runpod = ["runpod"]
 
 [project.scripts]
 service = "sky_atc.service:function"
 
 
 [tool.setuptools.packages.find]
-where = ["src/python"]
+where = ["src/python", "src/python/sky_atc"]

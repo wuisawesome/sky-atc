@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z#github.com/wuisawesome/sky-atc/grpc',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12pod_provider.proto\"1\n\x14\x43onfigureNodeRequest\x12\x19\n\x11\x63ore_v1_node_json\x18\x01 \x01(\t\"/\n\x12\x43onfigureNodeReply\x12\x19\n\x11\x63ore_v1_node_json\x18\x01 \x01(\t\"-\n\x11\x43reateNodeRequest\x12\x18\n\x10\x63ore_v1_pod_json\x18\x01 \x01(\t\"\x11\n\x0f\x43reateNodeReply2~\n\x0bPodProvider\x12;\n\rConfigureNode\x12\x15.ConfigureNodeRequest\x1a\x13.ConfigureNodeReply\x12\x32\n\nCreateNode\x12\x12.CreateNodeRequest\x1a\x10.CreateNodeReplyB%Z#github.com/wuisawesome/sky-atc/grpcb\x06proto3'
+  serialized_pb=b'\n\x12pod_provider.proto\"1\n\x14\x43onfigureNodeRequest\x12\x19\n\x11\x63ore_v1_node_json\x18\x01 \x01(\t\"/\n\x12\x43onfigureNodeReply\x12\x19\n\x11\x63ore_v1_node_json\x18\x01 \x01(\t\",\n\x10\x43reatePodRequest\x12\x18\n\x10\x63ore_v1_pod_json\x18\x01 \x01(\t\"\x10\n\x0e\x43reatePodReply2{\n\x0bPodProvider\x12;\n\rConfigureNode\x12\x15.ConfigureNodeRequest\x1a\x13.ConfigureNodeReply\x12/\n\tCreatePod\x12\x11.CreatePodRequest\x1a\x0f.CreatePodReplyB%Z#github.com/wuisawesome/sky-atc/grpcb\x06proto3'
 )
 
 
@@ -89,16 +89,16 @@ _CONFIGURENODEREPLY = _descriptor.Descriptor(
 )
 
 
-_CREATENODEREQUEST = _descriptor.Descriptor(
-  name='CreateNodeRequest',
-  full_name='CreateNodeRequest',
+_CREATEPODREQUEST = _descriptor.Descriptor(
+  name='CreatePodRequest',
+  full_name='CreatePodRequest',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   create_key=_descriptor._internal_create_key,
   fields=[
     _descriptor.FieldDescriptor(
-      name='core_v1_pod_json', full_name='CreateNodeRequest.core_v1_pod_json', index=0,
+      name='core_v1_pod_json', full_name='CreatePodRequest.core_v1_pod_json', index=0,
       number=1, type=9, cpp_type=9, label=1,
       has_default_value=False, default_value=b"".decode('utf-8'),
       message_type=None, enum_type=None, containing_type=None,
@@ -117,13 +117,13 @@ _CREATENODEREQUEST = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=122,
-  serialized_end=167,
+  serialized_end=166,
 )
 
 
-_CREATENODEREPLY = _descriptor.Descriptor(
-  name='CreateNodeReply',
-  full_name='CreateNodeReply',
+_CREATEPODREPLY = _descriptor.Descriptor(
+  name='CreatePodReply',
+  full_name='CreatePodReply',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
@@ -141,14 +141,14 @@ _CREATENODEREPLY = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=169,
-  serialized_end=186,
+  serialized_start=168,
+  serialized_end=184,
 )
 
 DESCRIPTOR.message_types_by_name['ConfigureNodeRequest'] = _CONFIGURENODEREQUEST
 DESCRIPTOR.message_types_by_name['ConfigureNodeReply'] = _CONFIGURENODEREPLY
-DESCRIPTOR.message_types_by_name['CreateNodeRequest'] = _CREATENODEREQUEST
-DESCRIPTOR.message_types_by_name['CreateNodeReply'] = _CREATENODEREPLY
+DESCRIPTOR.message_types_by_name['CreatePodRequest'] = _CREATEPODREQUEST
+DESCRIPTOR.message_types_by_name['CreatePodReply'] = _CREATEPODREPLY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 ConfigureNodeRequest = _reflection.GeneratedProtocolMessageType('ConfigureNodeRequest', (_message.Message,), {
@@ -165,19 +165,19 @@ ConfigureNodeReply = _reflection.GeneratedProtocolMessageType('ConfigureNodeRepl
   })
 _sym_db.RegisterMessage(ConfigureNodeReply)
 
-CreateNodeRequest = _reflection.GeneratedProtocolMessageType('CreateNodeRequest', (_message.Message,), {
-  'DESCRIPTOR' : _CREATENODEREQUEST,
+CreatePodRequest = _reflection.GeneratedProtocolMessageType('CreatePodRequest', (_message.Message,), {
+  'DESCRIPTOR' : _CREATEPODREQUEST,
   '__module__' : 'pod_provider_pb2'
-  # @@protoc_insertion_point(class_scope:CreateNodeRequest)
+  # @@protoc_insertion_point(class_scope:CreatePodRequest)
   })
-_sym_db.RegisterMessage(CreateNodeRequest)
+_sym_db.RegisterMessage(CreatePodRequest)
 
-CreateNodeReply = _reflection.GeneratedProtocolMessageType('CreateNodeReply', (_message.Message,), {
-  'DESCRIPTOR' : _CREATENODEREPLY,
+CreatePodReply = _reflection.GeneratedProtocolMessageType('CreatePodReply', (_message.Message,), {
+  'DESCRIPTOR' : _CREATEPODREPLY,
   '__module__' : 'pod_provider_pb2'
-  # @@protoc_insertion_point(class_scope:CreateNodeReply)
+  # @@protoc_insertion_point(class_scope:CreatePodReply)
   })
-_sym_db.RegisterMessage(CreateNodeReply)
+_sym_db.RegisterMessage(CreatePodReply)
 
 
 DESCRIPTOR._options = None
@@ -189,8 +189,8 @@ _PODPROVIDER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=188,
-  serialized_end=314,
+  serialized_start=186,
+  serialized_end=309,
   methods=[
   _descriptor.MethodDescriptor(
     name='ConfigureNode',
@@ -203,12 +203,12 @@ _PODPROVIDER = _descriptor.ServiceDescriptor(
     create_key=_descriptor._internal_create_key,
   ),
   _descriptor.MethodDescriptor(
-    name='CreateNode',
-    full_name='PodProvider.CreateNode',
+    name='CreatePod',
+    full_name='PodProvider.CreatePod',
     index=1,
     containing_service=None,
-    input_type=_CREATENODEREQUEST,
-    output_type=_CREATENODEREPLY,
+    input_type=_CREATEPODREQUEST,
+    output_type=_CREATEPODREPLY,
     serialized_options=None,
     create_key=_descriptor._internal_create_key,
   ),

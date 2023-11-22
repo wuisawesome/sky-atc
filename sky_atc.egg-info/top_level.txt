@@ -1,3 +1,5 @@
+generated
 integration_tests
+runpod
 sky_atc
 tests

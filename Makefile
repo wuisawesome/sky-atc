@@ -12,3 +12,8 @@ docker: proto
 
 kind: docker
 	kind load docker-image sky-atc:dev
+
+
+test-runpod: proto
+	python -m pip install .[runpod]
+	pytest -v src/python/integration_tests/test_runpod.py

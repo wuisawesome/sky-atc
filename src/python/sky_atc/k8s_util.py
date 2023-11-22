@@ -16,11 +16,13 @@ def _camelCaseTo_snake_case(s):
 
 
 def _construct_v1_type(type_str : str, data : Union[str, int, datetime, Dict[str, Any], List[Any]]) -> Any:
-    # print(f"_construct_v1_type({type_str}, {data})")
+    print(f"_construct_v1_type({type_str}, {data})")
     if data is None:
         return None
 
-    if type_str in {"int", "str", "datetime", "dict(str, str)"}:
+    if type_str in {"int", "str", "datetime", "dict(str, str)", "object", "bool"}:
+        # There seem to be a smattering of openapi types that are represented
+        # by built in python types. This may or may not be a complete list.
         return data
 
     if type_str.startswith("list"):
@@ -44,10 +46,14 @@ def _construct_v1_type(type_str : str, data : Union[str, int, datetime, Dict[str
     return cls(**constructor_args)
 
 
-
-
 def json_string_to_node(json_string):
     as_dict = json.loads(json_string)
 
     return _construct_v1_type("V1Node", as_dict)
+
+
+def json_string_to_pod(json_string):
+    as_dict = json.loads(json_string)
+
+    return _construct_v1_type("V1Pod", as_dict)
 

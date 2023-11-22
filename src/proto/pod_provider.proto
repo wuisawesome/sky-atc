@@ -10,11 +10,11 @@ message ConfigureNodeReply {
   string core_v1_node_json = 1;
 }
 
-message CreateNodeRequest {
+message CreatePodRequest {
   string core_v1_pod_json = 1;
 }
 
-message CreateNodeReply {
+message CreatePodReply {
   // Intentionally empty.
 }
 
@@ -22,6 +22,6 @@ service PodProvider {
 
   rpc ConfigureNode(ConfigureNodeRequest) returns (ConfigureNodeReply);
 
-  rpc CreateNode(CreateNodeRequest) returns (CreateNodeReply);
+  rpc CreatePod(CreatePodRequest) returns (CreatePodReply);
 
 }
