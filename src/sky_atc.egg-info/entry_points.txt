@@ -1,0 +1,2 @@
+[console_scripts]
+service = sky_atc.service:function
