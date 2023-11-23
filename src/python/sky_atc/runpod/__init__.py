@@ -1,6 +1,16 @@
 import runpod
+import runpod.api.ctl_commands
 import os
 from typing import Any, Optional
+
+from dataclasses import dataclass
+
+@dataclass(frozen=True)
+class Pod:
+    name : str
+    id : str
+    _provider_specific : Any
+
 
 class RunPodProvider:
 
@@ -13,14 +23,22 @@ class RunPodProvider:
         runpod.api_key = api_key
 
     def create_pod(self, name : str, image : str, hardware : Any):
-
-        pass
+        return runpod.api.ctl_commands.create_pod(f"{self.namespace}/{name}", image, hardware)
 
     def list_pods(self):
         pods = []
-        for pod_name, value in runpod.get_pods().items():
-            if pod_name.startswith(f"{self.namespace}/"):
-                pods.append(value)
+        namespace_prefix = f"{self.namespace}/"
+        for value in runpod.api.ctl_commands.get_pods():
+            if value["name"].startswith(namespace_prefix):
+                pod = Pod(
+                    id=value["id"],
+                    name=value["name"][len(namespace_prefix):],
+                    _provider_specific = value,
+                )
+            pods.append(pod)
 
         return pods
+
+    def delete_pod(self, pod : Pod):
+        runpod.api.ctl_commands.terminate_pod(pod.id)
 
