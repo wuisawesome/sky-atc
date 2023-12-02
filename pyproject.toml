@@ -27,9 +27,7 @@ dynamic = ["version"]
 [project.optional-dependencies]
 aws = ["awscli"]
 runpod = ["runpod"]
-
-[project.scripts]
-service = "sky_atc.service:function"
+modal = ["docker", "modal"]
 
 
 [tool.setuptools.packages.find]

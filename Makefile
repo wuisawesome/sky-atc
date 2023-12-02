@@ -15,5 +15,9 @@ kind: docker
 
 
 test-runpod: proto
-	python -m pip install .[runpod]
+	python -m pip install -e .[runpod]
 	pytest -v src/python/integration_tests/test_runpod.py
+
+test-modal: proto
+	python -m pip install -e .[modal]
+	pytest -v src/python/integration_tests/test_modal.py

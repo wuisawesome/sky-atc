@@ -5,5 +5,9 @@ kubernetes
 [aws]
 awscli
 
+[modal]
+docker
+modal
+
 [runpod]
 runpod
