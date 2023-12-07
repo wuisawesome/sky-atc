@@ -1,6 +1,0 @@
-generated
-integration_tests
-modal
-runpod
-sky_atc
-tests

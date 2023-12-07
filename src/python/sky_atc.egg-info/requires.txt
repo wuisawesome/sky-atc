@@ -1,9 +1,0 @@
-grpcio
-protobuf<=3.20
-kubernetes
-
-[aws]
-awscli
-
-[runpod]
-runpod

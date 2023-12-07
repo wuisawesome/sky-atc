@@ -1,9 +1,0 @@
-pyproject.toml
-src/python/generated/pod_provider_pb2.py
-src/python/generated/pod_provider_pb2_grpc.py
-src/python/skyatc.egg-info/PKG-INFO
-src/python/skyatc.egg-info/SOURCES.txt
-src/python/skyatc.egg-info/dependency_links.txt
-src/python/skyatc.egg-info/entry_points.txt
-src/python/skyatc.egg-info/requires.txt
-src/python/skyatc.egg-info/top_level.txt

@@ -1,4 +1,0 @@
-grpcio
-
-[aws]
-awscli
