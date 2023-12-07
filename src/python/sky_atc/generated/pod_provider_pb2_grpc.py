@@ -24,6 +24,11 @@ class PodProviderStub(object):
                 request_serializer=pod__provider__pb2.CreatePodRequest.SerializeToString,
                 response_deserializer=pod__provider__pb2.CreatePodReply.FromString,
                 )
+        self.DeletePod = channel.unary_unary(
+                '/PodProvider/DeletePod',
+                request_serializer=pod__provider__pb2.DeletePodRequest.SerializeToString,
+                response_deserializer=pod__provider__pb2.DeletePodReply.FromString,
+                )
 
 
 class PodProviderServicer(object):
@@ -41,6 +46,12 @@ class PodProviderServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def DeletePod(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_PodProviderServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -53,6 +64,11 @@ def add_PodProviderServicer_to_server(servicer, server):
                     servicer.CreatePod,
                     request_deserializer=pod__provider__pb2.CreatePodRequest.FromString,
                     response_serializer=pod__provider__pb2.CreatePodReply.SerializeToString,
+            ),
+            'DeletePod': grpc.unary_unary_rpc_method_handler(
+                    servicer.DeletePod,
+                    request_deserializer=pod__provider__pb2.DeletePodRequest.FromString,
+                    response_serializer=pod__provider__pb2.DeletePodReply.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -95,5 +111,22 @@ class PodProvider(object):
         return grpc.experimental.unary_unary(request, target, '/PodProvider/CreatePod',
             pod__provider__pb2.CreatePodRequest.SerializeToString,
             pod__provider__pb2.CreatePodReply.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def DeletePod(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/PodProvider/DeletePod',
+            pod__provider__pb2.DeletePodRequest.SerializeToString,
+            pod__provider__pb2.DeletePodReply.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

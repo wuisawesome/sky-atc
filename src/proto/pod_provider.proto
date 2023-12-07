@@ -18,10 +18,20 @@ message CreatePodReply {
   // Intentionally empty.
 }
 
+message DeletePodRequest {
+  string core_v1_pod_json = 1;
+}
+
+message DeletePodReply {
+  // Intentionally empty.
+}
+
 service PodProvider {
 
   rpc ConfigureNode(ConfigureNodeRequest) returns (ConfigureNodeReply);
 
   rpc CreatePod(CreatePodRequest) returns (CreatePodReply);
+
+  rpc DeletePod(DeletePodRequest) returns (DeletePodReply);
 
 }

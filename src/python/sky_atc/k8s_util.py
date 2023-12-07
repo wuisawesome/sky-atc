@@ -16,7 +16,7 @@ def _camelCaseTo_snake_case(s):
 
 
 def _construct_v1_type(type_str : str, data : Union[str, int, datetime, Dict[str, Any], List[Any]]) -> Any:
-    print(f"_construct_v1_type({type_str}, {data})")
+    # print(f"_construct_v1_type({type_str}, {data})")
     if data is None:
         return None
 

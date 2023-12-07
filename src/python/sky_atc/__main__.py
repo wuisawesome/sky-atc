@@ -1,5 +1,6 @@
 from sky_atc import PodProviderServicer
 from sky_atc.generated import pod_provider_pb2_grpc
+from sky_atc.runpod import RunPodProvider
 
 from concurrent import futures
 import grpc
@@ -25,7 +26,9 @@ logger.info("In python!")
 port = "50051"
 server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
-pod_provider_pb2_grpc.add_PodProviderServicer_to_server(PodProviderServicer(), server)
+
+pod_provider = RunPodProvider("alex-namespace")
+pod_provider_pb2_grpc.add_PodProviderServicer_to_server(PodProviderServicer(pod_provider), server)
 
 server.add_insecure_port("[::]:" + port)
 logger.info("Starting server...")

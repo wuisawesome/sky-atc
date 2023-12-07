@@ -1,5 +1,6 @@
 import pytest
 import os
+import runpod.api.ctl_commands
 
 import sky_atc.runpod
 from sky_atc.runpod import RunPodProvider
@@ -9,10 +10,13 @@ def test_basic():
 
     provider = RunPodProvider("integration-test")
 
+    print("available hardware: ", runpod.api.ctl_commands.get_gpus())
+
     pods = provider.list_pods()
     assert len(pods) == 0, f"{pods}"
 
     provider.create_pod("my-node", "ubuntu:latest", "NVIDIA GeForce RTX 3070")
+    # provider.create_pod("my-node", "ubuntu:latest")
 
     pods = provider.list_pods()
     assert len(pods) == 1, f"{pods}"
