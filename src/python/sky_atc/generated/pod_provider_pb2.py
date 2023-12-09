@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=b'Z#github.com/wuisawesome/sky-atc/grpc',
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x12pod_provider.proto\"1\n\x14\x43onfigureNodeRequest\x12\x19\n\x11\x63ore_v1_node_json\x18\x01 \x01(\t\"/\n\x12\x43onfigureNodeReply\x12\x19\n\x11\x63ore_v1_node_json\x18\x01 \x01(\t\",\n\x10\x43reatePodRequest\x12\x18\n\x10\x63ore_v1_pod_json\x18\x01 \x01(\t\"\x10\n\x0e\x43reatePodReply\",\n\x10\x44\x65letePodRequest\x12\x18\n\x10\x63ore_v1_pod_json\x18\x01 \x01(\t\"\x10\n\x0e\x44\x65letePodReply2\xac\x01\n\x0bPodProvider\x12;\n\rConfigureNode\x12\x15.ConfigureNodeRequest\x1a\x13.ConfigureNodeReply\x12/\n\tCreatePod\x12\x11.CreatePodRequest\x1a\x0f.CreatePodReply\x12/\n\tDeletePod\x12\x11.DeletePodRequest\x1a\x0f.DeletePodReplyB%Z#github.com/wuisawesome/sky-atc/grpcb\x06proto3'
+  serialized_pb=b'\n\x12pod_provider.proto\"1\n\x14\x43onfigureNodeRequest\x12\x19\n\x11\x63ore_v1_node_json\x18\x01 \x01(\t\"/\n\x12\x43onfigureNodeReply\x12\x19\n\x11\x63ore_v1_node_json\x18\x01 \x01(\t\",\n\x10\x43reatePodRequest\x12\x18\n\x10\x63ore_v1_pod_json\x18\x01 \x01(\t\"\x10\n\x0e\x43reatePodReply\",\n\x10\x44\x65letePodRequest\x12\x18\n\x10\x63ore_v1_pod_json\x18\x01 \x01(\t\"\x10\n\x0e\x44\x65letePodReply\"\x10\n\x0eGetPodsRequest\"*\n\x0cGetPodsReply\x12\x1a\n\x12\x63ore_v1_node_jsons\x18\x01 \x03(\t2\xac\x01\n\x0bPodProvider\x12;\n\rConfigureNode\x12\x15.ConfigureNodeRequest\x1a\x13.ConfigureNodeReply\x12/\n\tCreatePod\x12\x11.CreatePodRequest\x1a\x0f.CreatePodReply\x12/\n\tDeletePod\x12\x11.DeletePodRequest\x1a\x0f.DeletePodReplyB%Z#github.com/wuisawesome/sky-atc/grpcb\x06proto3'
 )
 
 
@@ -202,12 +202,71 @@ _DELETEPODREPLY = _descriptor.Descriptor(
   serialized_end=248,
 )
 
+
+_GETPODSREQUEST = _descriptor.Descriptor(
+  name='GetPodsRequest',
+  full_name='GetPodsRequest',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=250,
+  serialized_end=266,
+)
+
+
+_GETPODSREPLY = _descriptor.Descriptor(
+  name='GetPodsReply',
+  full_name='GetPodsReply',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  create_key=_descriptor._internal_create_key,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='core_v1_node_jsons', full_name='GetPodsReply.core_v1_node_jsons', index=0,
+      number=1, type=9, cpp_type=9, label=3,
+      has_default_value=False, default_value=[],
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+  ],
+  serialized_options=None,
+  is_extendable=False,
+  syntax='proto3',
+  extension_ranges=[],
+  oneofs=[
+  ],
+  serialized_start=268,
+  serialized_end=310,
+)
+
 DESCRIPTOR.message_types_by_name['ConfigureNodeRequest'] = _CONFIGURENODEREQUEST
 DESCRIPTOR.message_types_by_name['ConfigureNodeReply'] = _CONFIGURENODEREPLY
 DESCRIPTOR.message_types_by_name['CreatePodRequest'] = _CREATEPODREQUEST
 DESCRIPTOR.message_types_by_name['CreatePodReply'] = _CREATEPODREPLY
 DESCRIPTOR.message_types_by_name['DeletePodRequest'] = _DELETEPODREQUEST
 DESCRIPTOR.message_types_by_name['DeletePodReply'] = _DELETEPODREPLY
+DESCRIPTOR.message_types_by_name['GetPodsRequest'] = _GETPODSREQUEST
+DESCRIPTOR.message_types_by_name['GetPodsReply'] = _GETPODSREPLY
 _sym_db.RegisterFileDescriptor(DESCRIPTOR)
 
 ConfigureNodeRequest = _reflection.GeneratedProtocolMessageType('ConfigureNodeRequest', (_message.Message,), {
@@ -252,6 +311,20 @@ DeletePodReply = _reflection.GeneratedProtocolMessageType('DeletePodReply', (_me
   })
 _sym_db.RegisterMessage(DeletePodReply)
 
+GetPodsRequest = _reflection.GeneratedProtocolMessageType('GetPodsRequest', (_message.Message,), {
+  'DESCRIPTOR' : _GETPODSREQUEST,
+  '__module__' : 'pod_provider_pb2'
+  # @@protoc_insertion_point(class_scope:GetPodsRequest)
+  })
+_sym_db.RegisterMessage(GetPodsRequest)
+
+GetPodsReply = _reflection.GeneratedProtocolMessageType('GetPodsReply', (_message.Message,), {
+  'DESCRIPTOR' : _GETPODSREPLY,
+  '__module__' : 'pod_provider_pb2'
+  # @@protoc_insertion_point(class_scope:GetPodsReply)
+  })
+_sym_db.RegisterMessage(GetPodsReply)
+
 
 DESCRIPTOR._options = None
 
@@ -262,8 +335,8 @@ _PODPROVIDER = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=251,
-  serialized_end=423,
+  serialized_start=313,
+  serialized_end=485,
   methods=[
   _descriptor.MethodDescriptor(
     name='ConfigureNode',

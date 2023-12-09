@@ -3,7 +3,7 @@ import os
 import runpod.api.ctl_commands
 
 import sky_atc.runpod
-from sky_atc.runpod import RunPodProvider
+from sky_atc.runpod import RunPodProvider, AlreadyExistsError
 
 def test_basic():
     assert "RUNPOD_API_KEY" in os.environ
@@ -16,7 +16,9 @@ def test_basic():
     assert len(pods) == 0, f"{pods}"
 
     provider.create_pod("my-node", "ubuntu:latest", "NVIDIA GeForce RTX 3070")
-    # provider.create_pod("my-node", "ubuntu:latest")
+
+    with pytest.raises(AlreadyExistsError):
+        provider.create_pod("my-node", "ubuntu:latest", "NVIDIA GeForce RTX 3070")
 
     pods = provider.list_pods()
     assert len(pods) == 1, f"{pods}"

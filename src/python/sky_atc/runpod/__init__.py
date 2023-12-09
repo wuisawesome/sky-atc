@@ -3,7 +3,7 @@ import runpod.api.ctl_commands
 import os
 from typing import Any, Optional
 
-from sky_atc import PodProvider, Pod
+from sky_atc import AlreadyExistsError, PodProvider, Pod
 
 class RunPodProvider(PodProvider):
 
@@ -16,7 +16,13 @@ class RunPodProvider(PodProvider):
         runpod.api_key = api_key
 
     def create_pod(self, name : str, image : str, hardware : Any):
-        return runpod.api.ctl_commands.create_pod(f"{self.namespace}/{name}", image, hardware)
+        runpod_name = f"{self.namespace}/{name}"
+
+        for pod in self.list_pods():
+            if pod._provider_specific["name"] == runpod_name:
+                raise AlreadyExistsError(f"A pod already exists with details: {pod}.")
+
+        return runpod.api.ctl_commands.create_pod(runpod_name, image, hardware)
 
     def list_pods(self):
         pods = []

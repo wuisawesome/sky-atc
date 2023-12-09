@@ -28,6 +28,10 @@ class PodProvider(ABC):
         raise NotImplemented
 
 
+class AlreadyExistsError(KeyError):
+    pass
+
+
 class PodProviderServicer(pod_provider_pb2_grpc.PodProviderServicer):
 
     def __init__(self, pod_provider : PodProvider):
@@ -65,9 +69,14 @@ class PodProviderServicer(pod_provider_pb2_grpc.PodProviderServicer):
         assert len(pod.spec.containers) == 1, f"Expected a single container in the pod. Got {pod.spec.containers}"
         image = pod.spec.containers[0].image
 
-        self.pod_provider.create_pod(name, image, "NVIDIA GeForce RTX 3070")
-
-        return pod_provider_pb2.CreatePodReply()
+        try:
+            self.pod_provider.create_pod(name, image, "NVIDIA GeForce RTX 3070")
+        except AlreadyExistsError as e:
+            context.set_code(grpc.StatusCode.ALREADY_EXISTS)
+            context.set_details(e)
+            raise
+        else:
+            return pod_provider_pb2.CreatePodReply()
 
     def DeletePod(self, request, context):
         """Missing associated documentation comment in .proto file."""

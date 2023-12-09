@@ -26,6 +26,13 @@ message DeletePodReply {
   // Intentionally empty.
 }
 
+message GetPodsRequest {
+}
+
+message GetPodsReply {
+  repeated string core_v1_node_jsons = 1;
+}
+
 service PodProvider {
 
   rpc ConfigureNode(ConfigureNodeRequest) returns (ConfigureNodeReply);
