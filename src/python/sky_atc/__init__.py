@@ -1,4 +1,4 @@
-from .pod_provider import PodProviderServicer, PodProvider, Pod
+from .pod_provider import AlreadyExistsError, PodProviderServicer, PodProvider, Pod
 
-__all__ = ["PodProviderServicer", "PodProvider", "Pod"]
+__all__ = ["AlreadyExistsErrror", "PodProviderServicer", "PodProvider", "Pod"]
 

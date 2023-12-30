@@ -20,9 +20,41 @@ def test_json_to_pod():
     assert isinstance(result, client.V1Pod)
 
 
-def test_temp():
-    d = {"address": "abc", "type":"xyz"}
+def test_pod_status_to_json():
+    pod_status = client.V1PodStatus(
+        container_statuses= [
+            client.V1ContainerStatus(
+                name="hello",
+                container_id="hello",
+                image="my_image",
+                image_id="my_image",
+                restart_count = 0,
+                ready = True,
+                started = True,
+                state = client.V1ContainerState(
+                    running = client.V1ContainerStateRunning(),
+                ),
+            )
+        ]
+    )
 
-    result = k8s_util._construct_v1_type("V1NodeAddress", d)
+    as_dict = k8s_util.v1_type_to_dict(pod_status)
 
-    assert isinstance(result, client.V1NodeAddress)
+    assert as_dict == {
+        'containerStatuses': [
+            {
+                'containerID': 'hello',
+                'image': 'my_image',
+                'imageID': 'my_image',
+                'name': 'hello',
+                'ready': True,
+                'restartCount': 0,
+                'started': True,
+                'state': {
+                    'running': {},
+                }
+            }
+        ],
+    }
+
+

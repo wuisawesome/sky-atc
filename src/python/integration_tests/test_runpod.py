@@ -21,6 +21,7 @@ def test_basic():
         provider.create_pod("my-node", "ubuntu:latest", "NVIDIA GeForce RTX 3070")
 
     pods = provider.list_pods()
+    print(pods)
     assert len(pods) == 1, f"{pods}"
 
     for pod in pods:

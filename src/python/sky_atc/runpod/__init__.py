@@ -1,7 +1,7 @@
 import runpod
 import runpod.api.ctl_commands
 import os
-from typing import Any, Optional
+from typing import Any, Optional, Tuple
 
 from sky_atc import AlreadyExistsError, PodProvider, Pod
 
@@ -34,7 +34,7 @@ class RunPodProvider(PodProvider):
                     name=value["name"][len(namespace_prefix):],
                     _provider_specific = value,
                 )
-            pods.append(pod)
+                pods.append(pod)
 
         return pods
 

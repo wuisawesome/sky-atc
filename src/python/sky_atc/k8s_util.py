@@ -4,16 +4,22 @@ from typing import Any, Dict, List, Union
 import re
 from datetime import datetime
 import logging
+import hashlib
 
 
 logger = logging.getLogger(__name__)
 
 
-def _camelCaseTo_snake_case(s):
+def _camelCaseTo_snake_case(s : str) -> str:
     # Probably works https://stackoverflow.com/questions/1175208/elegant-python-function-to-convert-camelcase-to-snake-case
     s = re.sub('(.)([A-Z][a-z]+)', r'\1_\2', s)
     return re.sub('([a-z0-9])([A-Z])', r'\1_\2', s).lower()
 
+def _snake_to_camel(snake_case):
+    # Split the string into words using underscores
+    words = snake_case.split('_')
+    words[1:] = [word.capitalize() for word in words[1:]]
+    return "".join(words)
 
 def _construct_v1_type(type_str : str, data : Union[str, int, datetime, Dict[str, Any], List[Any]]) -> Any:
     # print(f"_construct_v1_type({type_str}, {data})")
@@ -46,14 +52,48 @@ def _construct_v1_type(type_str : str, data : Union[str, int, datetime, Dict[str
     return cls(**constructor_args)
 
 
-def json_string_to_node(json_string):
+def json_string_to_node(json_string : str) -> client.V1Node:
     as_dict = json.loads(json_string)
 
     return _construct_v1_type("V1Node", as_dict)
 
 
-def json_string_to_pod(json_string):
+def json_string_to_pod(json_string : str) -> client.V1Pod:
     as_dict = json.loads(json_string)
 
     return _construct_v1_type("V1Pod", as_dict)
+
+
+def v1_type_to_dict(obj : Any) -> Union[Dict, List, int, float, Any]:
+    if isinstance(obj, list):
+        return [v1_type_to_dict(x) for x in obj]
+
+    if not hasattr(obj, "attribute_map"):
+        return obj
+
+    as_dict = {}
+    for attr_name, dict_name in obj.attribute_map.items():
+        value = v1_type_to_dict(getattr(obj, attr_name))
+        if value is not None:
+            as_dict[dict_name] = value
+
+    return as_dict
+
+
+def stable_pod_config_hash(pod : client.V1Pod) -> str:
+    """We're defining the notion of a "config" to mean the parts of the pod
+    resource that the user specifies that we need to satisfy. If their config
+    changes, we need to make changes (which likely means stopping the pod and
+    starting an ew on with the new config).
+
+    We need to summarize some the pod into some string small enough that it
+    can fit in the smallest "kv store" the the compute providers have.
+
+    If this value changes, we should assume that the pod config has changed.
+    """
+    spec = pod.spec
+    # sort_keys is the only parameter that's really needed?
+    canonical_str = json.dumps(spec.to_dict(), sort_keys=True, indent='', separators='').encode('utf-8')
+    # md5 digest is shorter and inputs shouldn't be malicious.
+    return hashlib.md5(canonical_str).digest()
 
