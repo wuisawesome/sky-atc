@@ -12,22 +12,22 @@ def test_basic():
 
     print("available hardware: ", runpod.api.ctl_commands.get_gpus())
 
-    pods = provider.list_pods()
-    assert len(pods) == 0, f"{pods}"
+    containers = provider.list_containers()
+    assert len(containers) == 0, f"{containers}"
 
-    provider.create_pod("my-node", "ubuntu:latest", "NVIDIA GeForce RTX 3070")
+    provider.create_container("my-node", "ubuntu:latest", "NVIDIA GeForce RTX 3070")
 
     with pytest.raises(AlreadyExistsError):
-        provider.create_pod("my-node", "ubuntu:latest", "NVIDIA GeForce RTX 3070")
+        provider.create_container("my-node", "ubuntu:latest", "NVIDIA GeForce RTX 3070")
 
-    pods = provider.list_pods()
-    print(pods)
-    assert len(pods) == 1, f"{pods}"
+    containers = provider.list_containers()
+    print(containers)
+    assert len(containers) == 1, f"{containers}"
 
-    for pod in pods:
-        print("Deleted", pod)
-        provider.delete_pod(pod)
+    for container in containers:
+        print("Deleted", container)
+        provider.delete_container(container)
 
-    pods = provider.list_pods()
-    assert len(pods) == 0, f"{pods}"
+    containers = provider.list_containers()
+    assert len(containers) == 0, f"{containers}"
 
