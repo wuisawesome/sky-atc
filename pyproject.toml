@@ -28,6 +28,7 @@ dynamic = ["version"]
 aws = ["awscli"]
 runpod = ["runpod", "pandas"]
 modal = ["docker", "modal"]
+lambdalabs = ["requests"]
 
 
 [tool.setuptools.packages.find]
