@@ -14,7 +14,7 @@ import time
 import pandas as pd
 import requests
 
-def get_gpu_stock_status(id : str, secure : bool):
+def get_secure_gpu_stock_status(id : str):
     secure_gpus_graphql_request = {
         "operationName":"SecureGpuTypes",
         "variables":{
@@ -28,7 +28,7 @@ def get_gpu_stock_status(id : str, secure : bool):
                 "minDisk":0,
                 "minMemoryInGb":8,
                 "minVcpuCount":2,
-                "secureCloud": secure
+                "secureCloud": True
             }
         },
         "query":
@@ -77,6 +77,69 @@ def get_gpu_stock_status(id : str, secure : bool):
 
     return gpu_details["lowestPrice"]["stockStatus"]
 
+
+def get_community_gpu_stock_status(id: str):
+    community_gpus_graphql_request = {
+        "operationName": "CommunityGpuTypes",
+        "variables": {
+            "gpuTypesInput": {
+                "id": "NVIDIA H100 80GB HBM3"
+            },
+            "lowestPriceInput": {
+                "minDisk": 0,
+                "countryCode": None,
+                "gpuCount": 1,
+                "minDownload": 40,
+                "minMemoryInGb": 8,
+                "minUpload": 40,
+                "minVcpuCount": 2,
+                "secureCloud": False,
+                "supportPublicIp": True,
+            }
+        },
+        "query":
+        """query CommunityGpuTypes($lowestPriceInput: GpuLowestPriceInput, $gpuTypesInput: GpuTypeFilter) {
+  gpuTypes(input: $gpuTypesInput) {
+    lowestPrice(input: $lowestPriceInput) {
+      minimumBidPrice
+      uninterruptablePrice
+      minVcpu
+      minMemory
+      stockStatus
+      __typename
+    }
+    id
+    displayName
+    memoryInGb
+    communityPrice
+    communitySpotPrice
+    __typename
+  }
+}"""
+    }
+
+    # If we just didn't specify this we would get all the gpus 🤔. Maybe we
+    # should do that? For now, we'll do it this way since the website does
+    # it this way. Maybe smaller requests are better for their load?
+    community_gpus_graphql_request["variables"]["gpuTypesInput"]["id"] = id
+    result = requests.post(
+        f"https://api.runpod.io/graphql?api_key={runpod.api_key}",
+        json = community_gpus_graphql_request
+    )
+
+    assert result.ok, f"Result not ok {result.status_code=}, {result.text=}"
+
+    gpu_types = result.json()["data"]["gpuTypes"]
+
+    assert len(gpu_types) == 1, f"Multiple gpu types {gpu_types}"
+
+    gpu_details = gpu_types[0]
+
+    assert gpu_details["id"] == id
+
+    return gpu_details["lowestPrice"]["stockStatus"]
+
+
 def get_all_gpu_details() -> pd.DataFrame:
     all_gpu_details = {
         'id': [], # str
@@ -100,8 +163,8 @@ def get_all_gpu_details() -> pd.DataFrame:
     for gpu in gpus:
         id = gpu["id"]
         gpu_details = runpod.api.ctl_commands.get_gpu(id)
-        gpu_details["secureStockStatus"] = get_gpu_stock_status(id, secure=True)
-        gpu_details["communityStockStatus"] = get_gpu_stock_status(id, secure=False)
+        gpu_details["secureStockStatus"] = get_secure_gpu_stock_status(id)
+        gpu_details["communityStockStatus"] = get_community_gpu_stock_status(id)
         gpu_details["timestamp"] = time.time()
 
         for key in all_gpu_details:
