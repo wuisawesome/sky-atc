@@ -13,8 +13,17 @@ import sys
 import time
 import pandas as pd
 import requests
+import math
 
-def get_secure_gpu_stock_status(id : str):
+def num_gpus_configuration(max_gpus : int):
+    """Courtesy of chat-gpt."""
+    # Calculate the maximum power of 2 that is less than or equal to n
+    max_power = math.floor(math.log(max_gpus, 2))
+    # Generate all powers of 2 from 2^0 up to the maximum power
+    return [2**x for x in range(max_power + 1)]
+
+
+def get_secure_gpu_stock_status(id : str, gpu_count : int):
     secure_gpus_graphql_request = {
         "operationName":"SecureGpuTypes",
         "variables":{
@@ -24,10 +33,7 @@ def get_secure_gpu_stock_status(id : str):
             "lowestPriceInput":
             {
                 "dataCenterId":None,
-                "gpuCount":1,
-                "minDisk":0,
-                "minMemoryInGb":8,
-                "minVcpuCount":2,
+                "gpuCount":gpu_count,
                 "secureCloud": True
             }
         },
@@ -78,7 +84,7 @@ def get_secure_gpu_stock_status(id : str):
     return gpu_details["lowestPrice"]["stockStatus"]
 
 
-def get_community_gpu_stock_status(id: str):
+def get_community_gpu_stock_status(id: str, gpu_count: int):
     community_gpus_graphql_request = {
         "operationName": "CommunityGpuTypes",
         "variables": {
@@ -86,13 +92,8 @@ def get_community_gpu_stock_status(id: str):
                 "id": "NVIDIA H100 80GB HBM3"
             },
             "lowestPriceInput": {
-                "minDisk": 0,
                 "countryCode": None,
-                "gpuCount": 1,
-                "minDownload": 40,
-                "minMemoryInGb": 8,
-                "minUpload": 40,
-                "minVcpuCount": 2,
+                "gpuCount": gpu_count,
                 "secureCloud": False,
                 "supportPublicIp": True,
             }
@@ -156,27 +157,33 @@ def get_all_gpu_details() -> pd.DataFrame:
         'oneMonthPrice': [], # float
         'threeMonthPrice': [], #float
         'secureStockStatus': [], #str
-        'communityStockStatus': [] # str
+        'communityStockStatus': [], # str
+        'gpuCount': [], # int
     }
 
     gpus = runpod.api.ctl_commands.get_gpus()
     for gpu in gpus:
         id = gpu["id"]
         gpu_details = runpod.api.ctl_commands.get_gpu(id)
-        gpu_details["secureStockStatus"] = get_secure_gpu_stock_status(id)
-        gpu_details["communityStockStatus"] = get_community_gpu_stock_status(id)
-        gpu_details["timestamp"] = time.time()
-
-        for key in all_gpu_details:
-            all_gpu_details[key].append(gpu_details[key])
+        for gpu_count in num_gpus_configuration(gpu_details["maxGpuCount"]):
+            gpu_details["secureStockStatus"] = get_secure_gpu_stock_status(id, gpu_count)
+            gpu_details["communityStockStatus"] = get_community_gpu_stock_status(id, gpu_count)
+            gpu_details["timestamp"] = time.time()
+            gpu_details["gpuCount"] = gpu_count
+            for key in all_gpu_details:
+                all_gpu_details[key].append(gpu_details[key])
 
     return pd.DataFrame(all_gpu_details)
 
 
 def create_or_append_csv(path: Path, df : pd.DataFrame):
     try:
-        print("Appending to existing file...")
         existing_df = pd.read_csv(path)
+
+        # TODO: Remove this after backporting this to existing data.
+        if "gpuCount" not in existing_df.columns:
+            existing_df["gpuCount"] = 1
+        print("Appending to existing file...")
         df = pd.concat([existing_df, df])
     except Exception:
         print("Creating new file...")
