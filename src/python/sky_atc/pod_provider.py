@@ -10,7 +10,7 @@ from kubernetes import client
 
 logger = logging.getLogger(__name__)
 
-def _make_pod_provider_name(pod : client.V1Pod) -> str:
+def _make_container_provider_name(pod : client.V1Pod) -> str:
     return f"{pod.metadata.namespace}/{pod.metadata.name}"
 
 class PodProviderServicer(pod_provider_pb2_grpc.PodProviderServicer):
@@ -45,13 +45,14 @@ class PodProviderServicer(pod_provider_pb2_grpc.PodProviderServicer):
         logger.info(f"Got CreateNode request. {request}")
         pod = json_string_to_pod(request.core_v1_pod_json)
 
-        name = _make_pod_provider_name(pod)
+        name = _make_container_provider_name(pod)
 
         assert len(pod.spec.containers) == 1, f"Expected a single container in the pod. Got {pod.spec.containers}"
         image = pod.spec.containers[0].image
+        hardware = pod.metadata.labels.get("virtual-kubelet.io/hardwareType")
 
         try:
-            self.container_provider.create_container(name, image, "NVIDIA GeForce RTX 3070")
+            self.container_provider.create_container(name, image, hardware)
         except AlreadyExistsError as e:
             context.set_code(grpc.StatusCode.ALREADY_EXISTS)
             context.set_details(str(e))
@@ -71,7 +72,7 @@ class PodProviderServicer(pod_provider_pb2_grpc.PodProviderServicer):
         for container in self.container_provider.list_containers():
             if container.name not in container_keys:
                 logger.info(f"Deleting {container}.")
-                self.container_provider.delete_containers(container)
+                self.container_provider.delete_container(container)
 
         return pod_provider_pb2.PrunePodsReply()
 

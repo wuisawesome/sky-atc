@@ -2,8 +2,11 @@ import runpod
 import runpod.api.ctl_commands
 import os
 from typing import Any, Optional, Tuple
+import logging
 
 from sky_atc import AlreadyExistsError, ContainerProvider, Container
+
+logger = logging.getLogger(__name__)
 
 class RunPodProvider(ContainerProvider):
 
@@ -17,6 +20,11 @@ class RunPodProvider(ContainerProvider):
 
     def create_container(self, name : str, image : str, hardware : Any):
         runpod_name = f"{self.namespace}/{name}"
+
+        if isinstance(hardware, str):
+            # k8s node selector value can't include spaces.
+            hardware = hardware.replace("_", " ").strip()
+            logger.debug(f"Normalizing hardware name to {hardware}.")
 
         for pod in self.list_containers():
             if pod._provider_specific["name"] == runpod_name:
